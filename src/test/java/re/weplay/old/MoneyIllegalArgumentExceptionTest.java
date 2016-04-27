@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
-import re.weplay.old.Money;
 
 @RunWith(JUnitParamsRunner.class)
 public class MoneyIllegalArgumentExceptionTest
