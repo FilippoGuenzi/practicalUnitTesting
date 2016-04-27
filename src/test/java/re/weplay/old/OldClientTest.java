@@ -3,8 +3,6 @@ package re.weplay.old;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import re.weplay.old.Address;
-import re.weplay.old.OldClient;
 
 public class OldClientTest
 {

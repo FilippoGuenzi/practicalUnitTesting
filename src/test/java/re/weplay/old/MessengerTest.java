@@ -2,11 +2,6 @@ package re.weplay.old;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import re.weplay.old.Client;
-import re.weplay.old.MailServer;
-import re.weplay.old.Messenger;
-import re.weplay.old.Template;
-import re.weplay.old.TemplateEngine;
 
 public class MessengerTest
 {

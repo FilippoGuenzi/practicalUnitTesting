@@ -2,7 +2,6 @@ package re.weplay.old;
 
 import org.junit.Assert;
 import org.junit.Test;
-import re.weplay.old.Money;
 
 public class MoneyTest
 {
