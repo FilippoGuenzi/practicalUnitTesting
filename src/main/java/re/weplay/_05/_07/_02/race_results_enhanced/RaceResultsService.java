@@ -23,9 +23,10 @@ public class RaceResultsService
 
     public void sendRaceMessages(RaceToBeSubscribed raceToBeSubscribed)
     {
-        while(!messagesToBeSent.get(raceToBeSubscribed).isEmpty())
+        while (!messagesToBeSent.get(raceToBeSubscribed).isEmpty())
         {
-            Message firstMessageInQueue = messagesToBeSent.get(raceToBeSubscribed).poll();
+            Message firstMessageInQueue = messagesToBeSent.get(
+                    raceToBeSubscribed).poll();
             for (Client client : subscriptions.get(raceToBeSubscribed))
             {
                 client.receive(firstMessageInQueue);
@@ -33,13 +34,23 @@ public class RaceResultsService
         }
     }
 
-    public void addSubscribtion(Client client, RaceToBeSubscribed raceToBeSubscribed)
+    public void addSubscribtion(
+            Client client, RaceToBeSubscribed raceToBeSubscribed
+                               )
     {
         subscriptions.get(raceToBeSubscribed).add(client);
     }
 
-    public void feedMessageQueue(RaceToBeSubscribed raceToBeSubscribed, Message message)
+    public void feedMessageQueue(
+            RaceToBeSubscribed raceToBeSubscribed, Message message
+                                )
     {
         messagesToBeSent.get(raceToBeSubscribed).add(message);
+    }
+
+    public void removeSubscription(
+            Client client, RaceToBeSubscribed raceToBeSubscribed)
+    {
+        subscriptions.get(raceToBeSubscribed).remove(client);
     }
 }

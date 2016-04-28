@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class RaceResultsServiceTest
@@ -32,9 +33,8 @@ public class RaceResultsServiceTest
 //        //Assert
 //        Mockito.verify(client.receive())
 //    }
-    //a_client_who_subscribed_to_a_sport_should_receive_all_its_new_notification_once()
 
-    //all_subscribers_to_a_sport_should_receive_any_new_incoming_message()
+    //all_subscribers_to_a_sport_should_receive_all_its_related_messages()
     @Test
     public void all_subscribers_to_a_sport_should_receive_any_new_incoming_message()
     {
@@ -72,6 +72,24 @@ public class RaceResultsServiceTest
     }
 
     //a_client_who_unsubscribed_a_sport_feed_shouldn_t_receive_any_new_notification_from_it()
+    @Test
+    public void a_client_who_unsubscribed_a_sport_feed_shouldn_t_receive_any_new_notification_from_it()
+    {
+        //Arrange
+        Client client = mock(Client.class);
+        RaceToBeSubscribed raceToBeSubscribed = mock(RaceToBeSubscribed.class);
+        List<RaceToBeSubscribed> racesToBeSubscribed = new ArrayList<>();
+
+        //Act
+        RaceResultsService raceResultsService = new RaceResultsService(racesToBeSubscribed);
+        raceResultsService.addSubscribtion(client, raceToBeSubscribed);
+        raceResultsService.removeSubscription(client, raceToBeSubscribed);
+        raceResultsService.sendRaceMessages(raceToBeSubscribed);
+
+        //Assert
+        verify(client, never()).receive(&==&);
+    }
+
     //a_new_subscription_to_a_sport_feed_issued_by_a_client_who_already_subscribed_to_it_should_be_ignored()
     //every_message_sent_by_the_RaceResultService_should_be_logged_with_its_date_and_text
     //an_unsubscription_from_a_client_who_already_unsubscribed_should_be_ignored
