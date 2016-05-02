@@ -35,13 +35,14 @@ public class FootballTeamTest
         //Act
         FootballTeam footballTeam = new FootballTeam(passedNumOfVictories);
         //Assert
-        assertEquals("\n"
-                     + "On s'attendait à "
-                     + expectedNumOfVictories
-                     + " victoires et au lieu on en a "
-                     + footballTeam.getNumOfVictories(),
-                     expectedNumOfVictories,
-                     footballTeam.getNumOfVictories()
+        assertEquals(
+                "\n"
+                + "On s'attendait à "
+                + expectedNumOfVictories
+                + " victoires et au lieu on en a "
+                + footballTeam.getNumOfVictories(),
+                expectedNumOfVictories,
+                footballTeam.getNumOfVictories()
                     );
     }
 
@@ -113,13 +114,14 @@ public class FootballTeamTest
         FootballTeam footballTeam1 = new FootballTeam(passedNumberOfVictories1);
         FootballTeam footballTeam2 = new FootballTeam(passedNumberOfVictories2);
         //Assert
-        assertEquals("Expected comparison signum was "
-                     + expectedComparisonSignum
-                     + " but is "
-                     + Math.signum(footballTeam1.compareTo(footballTeam2)),
-                     expectedComparisonSignum,
-                     Math.signum(footballTeam1.compareTo(footballTeam2)),
-                     0.000000000000000000000001
+        assertEquals(
+                "Expected comparison signum was "
+                + expectedComparisonSignum
+                + " but is "
+                + Math.signum(footballTeam1.compareTo(footballTeam2)),
+                expectedComparisonSignum,
+                Math.signum(footballTeam1.compareTo(footballTeam2)),
+                0.000000000000000000000001
                     );
     }
 }
