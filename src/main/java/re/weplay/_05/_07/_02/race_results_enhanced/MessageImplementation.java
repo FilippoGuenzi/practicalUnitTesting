@@ -2,7 +2,6 @@ package re.weplay._05._07._02.race_results_enhanced;
 
 public class MessageImplementation implements Message
 {
-    String title;
     String message;
 
     public MessageImplementation(String message)
@@ -10,10 +9,9 @@ public class MessageImplementation implements Message
         this.message = message;
     }
 
-    @Override
-    public String getTitle()
+    public String getMessage()
     {
-        return title;
+        return message;
     }
 
     @Override

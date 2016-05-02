@@ -65,7 +65,7 @@ public class RaceResultsService
             {
                 if (raceEntry.getValue().contains(client))
                 {
-                    subscribedRacesList += (subscribedRacesCount == 0 ? " " : ", ") + raceEntry.getKey().getTitle();
+                    subscribedRacesList += (subscribedRacesCount == 0 ? "" : ", ") + raceEntry.getKey().getTitle();
                     subscribedRacesCount++;
                 }
             }

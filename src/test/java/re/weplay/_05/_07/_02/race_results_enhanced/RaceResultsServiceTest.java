@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -31,8 +32,7 @@ public class RaceResultsServiceTest
     private Message message3;
     private RaceMessageLogger logger = mock(RaceMessageLogger.class);
 
-    @Before
-    public void setUp()
+    @Before public void setUp()
     {
         client1 = mock(Client.class);
         client2 = mock(Client.class);
@@ -45,14 +45,12 @@ public class RaceResultsServiceTest
         when(boatRace.getTitle()).thenReturn("boat races");
         racesToBeSubscribed = new ArrayList<>();
 
-
         message1 = mock(Message.class);
         message2 = mock(Message.class);
         message3 = mock(Message.class);
     }
 
-    @Test
-    public void a_client_who_unsubscribed_a_sport_feed_shouldn_t_receive_any_new_notification_from_it()
+    @Test public void a_client_who_unsubscribed_a_sport_feed_shouldn_t_receive_any_new_notification_from_it()
     {
         //Arrange
         racesToBeSubscribed.add(f1Race);
@@ -74,8 +72,7 @@ public class RaceResultsServiceTest
         verify(client1, never()).receive(message3);
     }
 
-    @Test
-    public void a_client_who_subscribed_to_two_sport_and_unsubscribed_one_should_still_receive_the_messages_from_the_one_he_didn_t_unsubscribed()
+    @Test public void a_client_who_subscribed_to_two_sport_and_unsubscribed_one_should_still_receive_the_messages_from_the_one_he_didn_t_unsubscribed()
     {
         //Arrange
         racesToBeSubscribed.add(f1Race);
@@ -100,8 +97,7 @@ public class RaceResultsServiceTest
         verify(client1, never()).receive(message3);
     }
 
-    @Test
-    public void all_subscribers_to_a_sport_should_receive_any_new_incoming_message()
+    @Test public void all_subscribers_to_a_sport_should_receive_any_new_incoming_message()
     {
         //Arrange
         racesToBeSubscribed.add(horseRace);
@@ -127,8 +123,7 @@ public class RaceResultsServiceTest
         verify(client2).receive(message3);
     }
 
-    @Test
-    public void a_client_who_subscribed_to_many_races_should_receive_messages_from_all_those_races()
+    @Test public void a_client_who_subscribed_to_many_races_should_receive_messages_from_all_those_races()
     {
         //Arrange
         racesToBeSubscribed.add(horseRace);
@@ -151,8 +146,7 @@ public class RaceResultsServiceTest
         verify(client1).receive(message3);
     }
 
-    @Test
-    public void a_client_who_never_subscribed_to_any_sport_shouldn_t_receive_any_notification()
+    @Test public void a_client_who_never_subscribed_to_any_sport_shouldn_t_receive_any_notification()
     {
         //Arrange
         racesToBeSubscribed.add(horseRace);
@@ -172,8 +166,7 @@ public class RaceResultsServiceTest
 
     }
 
-    @Test
-    public void a_new_subscription_to_a_sport_feed_issued_by_a_client_who_already_subscribed_to_it_should_be_ignored()
+    @Test public void a_new_subscription_to_a_sport_feed_issued_by_a_client_who_already_subscribed_to_it_should_be_ignored()
     {
         //Arrange
         racesToBeSubscribed.add(f1Race);
@@ -199,8 +192,7 @@ public class RaceResultsServiceTest
         verify(client2, times(1)).receive(message3);
     }
 
-    @Test(expected = RaceNotAvailableException.class)
-    public void a_subscription_to_a_race_not_listed_in_possible_subscription_should_throw_an_exception()
+    @Test(expected = RaceNotAvailableException.class) public void a_subscription_to_a_race_not_listed_in_possible_subscription_should_throw_an_exception()
     {
         //Arrange
         racesToBeSubscribed.add(f1Race);
@@ -213,8 +205,7 @@ public class RaceResultsServiceTest
 
     }
 
-    @Test
-    public void every_message_sent_should_be_logged()
+    @Test public void every_message_sent_should_be_logged()
     {
         //Arrange
         racesToBeSubscribed.add(f1Race);
@@ -249,6 +240,9 @@ public class RaceResultsServiceTest
     }
 
     @Test
+    // The problem is that when it's run with all the other tests it succeeds because the order of subscribed races between actual and expected is the same.
+    // While when run alone it fails because the order gets inverted.
+    // Whe should do some test which would be order indifferent
     public void when_a_client_who_already_unsubscribed_to_a_race_unsubscribes_again_he_should_receive_a_message_of_all_its_remaining_active_feeds()
     {
         //Arrange
@@ -263,13 +257,18 @@ public class RaceResultsServiceTest
 
         raceResultsService.removeSubscription(client1, f1Race);
 
-        String doubleUnsubscriptionMessage = "You already unsubscribed to f1 races notification. Didn't you mean to unsubscribe from one of those races you're still subscribed to : horses races, boat races ?";
+        String doubleUnsubscriptionMessage = "You already unsubscribed to f1 races notification. Didn't you mean to unsubscribe from one of those races you're still subscribed to : horse races, boat races ?";
 
         //Act
         raceResultsService.removeSubscription(client1, f1Race);
 
         //Assert
-        Assert.assertEquals("You should have " + doubleUnsubscriptionMessage + " but had " + raceResultsService.getDoubleUnsubscriptionMessage().getTitle(), doubleUnsubscriptionMessage, raceResultsService.getDoubleUnsubscriptionMessage().getTitle());
+        String actualMessageTitle = raceResultsService.getDoubleUnsubscriptionMessage().getMessage();
+        String expectedMessageTitle = doubleUnsubscriptionMessage;
+        String assertionErrorMessage = "You should have " + expectedMessageTitle + " but had " + actualMessageTitle;
+        Assert.assertEquals(assertionErrorMessage, expectedMessageTitle, actualMessageTitle);
 
+        verify(client1).receive(any(Message.class));
+        //comment vérifier que le message reçu par le client contient effectivement le même message. Je le verrai probablement avec les Mockito.matchers
     }
 }
